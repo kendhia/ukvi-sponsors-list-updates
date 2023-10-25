@@ -1,0 +1,26 @@
+{
+  "name": "companies-updated",
+  "main": "index.ts",
+  "scripts": {
+    "build": "npx esbuild src/index.ts --outdir=dist/ --bundle --minify --loader:.ts=ts --platform=node",
+    "test": "jest --verbose",
+    "deploy": "yarn build && pulumi up --yes"
+  },
+  "jest": {
+    "preset": "ts-jest"
+  },
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "@types/jest": "^29.5.6",
+    "@types/node": "^16",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.2.2",
+    "@pulumi/aws": "^6.6.0",
+    "@pulumi/awsx": "^2.0.2",
+    "@pulumi/pulumi": "^3.0.0"
+  },
+  "dependencies": {
+    "csv": "^6.3.5"
+  }
+}

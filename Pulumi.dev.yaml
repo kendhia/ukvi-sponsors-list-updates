@@ -1,0 +1,5 @@
+config:
+  aws:profile: YOUR_AWS_PROFILE
+  aws:region: eu-west-1
+  companies-updated:CSV_FILE_URL: https://assets.publishing.service.gov.uk/media/65325da30b5392000da92abc/2023-10-20_-_Worker_and_Temporary_Worker.csv
+  companies-updated:SEND_LIST_TO_EMAIL: YOUR_EMAIL_ADDRESS
