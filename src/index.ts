@@ -43,7 +43,7 @@ export const handler = async () => {
 
   if (!oldCompaniesListText) {
     console.log("Old companies list not found. Creating new one");
-    
+
     await putBucketContent({
       s3Client,
       bucketName,
@@ -69,7 +69,6 @@ export const handler = async () => {
   );
   
   const comparisonResult = {
-    expendAdded: isXCompanyAdded("expend", addedCompanies),
     numberOfAddedCompanies: addedCompanies.length,
     numberOfRemovedCompanies: removedCompanies.length,
     removedCompanies,
