@@ -10,6 +10,7 @@ import { isXCompanyAdded } from "./isXCompanyAdded";
 const companiesListUrl = process.env.CSV_FILE_URL;
 const bucketName = process.env.BUCKET_NAME;
 const topicArn = process.env.SNS_TOPIC_ARN;
+const companyName = process.env.COMPANY_NAME;
 
 const s3Client = new AWS.S3({
   region: "eu-west-1",
@@ -49,14 +50,28 @@ export const handler = async () => {
     oldCompaniesListText,
     newCompaniesList
   );
-  const comparisonResult = JSON.stringify({
+  
+  const comparisonResult = {
     expendAdded: isXCompanyAdded("expend", addedCompanies),
     numberOfAddedCompanies: addedCompanies.length,
     numberOfRemovedCompanies: removedCompanies.length,
     removedCompanies,
     addedCompanies,
+  };
+  companyName && (comparisonResult[`${companyName}IsAdded`] = isXCompanyAdded(companyName, addedCompanies));
+
+  const comparisonResultStr = JSON.stringify(comparisonResult);
+
+  console.log(`Companies list compared. Result: ${comparisonResultStr}`);
+
+  console.log("Sending email");
+  await sendSNSMessage({
+    snsClient,
+    topicArn,
+    message: comparisonResultStr,
   });
-  console.log(`Companies list compared. Result: ${comparisonResult}`);
+  console.log("Email sent");
+
 
   await putBucketContent({
     s3Client,
@@ -65,14 +80,6 @@ export const handler = async () => {
     content: newCompaniesList,
   });
   console.log("Companies list uploaded to S3");
-
-  console.log("Sending email");
-  await sendSNSMessage({
-    snsClient,
-    topicArn,
-    message: comparisonResult,
-  });
-  console.log("Email sent");
 
   return {
     statusCode: 200,

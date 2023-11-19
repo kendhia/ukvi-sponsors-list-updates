@@ -3,6 +3,7 @@ import * as aws from "@pulumi/aws";
 
 const config = new pulumi.Config();
 const CSV_FILE_URL = config.require("CSV_FILE_URL");
+const COMPANY_NAME = config.require("COMPANY_NAME");
 const SEND_LIST_EMAIL = config.require("SEND_LIST_TO_EMAIL");
 
 const lambdaRole = new aws.iam.Role("lambdaRole", {
@@ -59,6 +60,7 @@ const lambdaEnvVars = {
   },
 };
 CSV_FILE_URL && (lambdaEnvVars.variables["CSV_FILE_URL"] = CSV_FILE_URL);
+COMPANY_NAME && (lambdaEnvVars.variables["COMPANY_NAME"] = COMPANY_NAME);
 
 const lambda = new aws.lambda.Function("sponsors-list-update", {
   role: lambdaRole.arn,
@@ -72,9 +74,9 @@ const lambda = new aws.lambda.Function("sponsors-list-update", {
   memorySize: 512,
 });
 
-// run the lambda every day at 10:00 UTC
+// run the lambda every day at 11:30 UTC
 const rule = new aws.cloudwatch.EventRule("sponsors-list-update-rule", {
-  scheduleExpression: "cron(0 10 * * ? *)",
+  scheduleExpression: "cron(30 11 * * ? *)",
 });
 
 const target = new aws.cloudwatch.EventTarget("sponsors-list-update-target", {
