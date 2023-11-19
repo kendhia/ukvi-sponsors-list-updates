@@ -62,7 +62,7 @@ You can also run a test event on the lambda, and you should receive a notificati
 
 ## Customization
 
-You can customize the Lambda's functionality by modifying the code in the `lambda_function.py` file (or its equivalent if using a different language). The Pulumi scripts can be adjusted to change the AWS resource configurations.
+You can customize the Lambda's functionality by modifying the code in the `src/index.ts` file (or the other utils in `src`). The Pulumi scripts can be adjusted to change the AWS resource configurations.
 
 ## Contributing
 
