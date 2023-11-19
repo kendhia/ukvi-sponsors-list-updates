@@ -14,8 +14,15 @@ export async function getBucketContent({
     Key: key,
   };
 
-  const content = await s3Client.getObject(params).promise();
-  return content.Body?.toString();
+  try {
+    const content = await s3Client.getObject(params).promise();
+    return content.Body?.toString();
+  } catch (error) {
+    if (error.code === "NoSuchKey") {
+      return null;
+    }
+    throw error;
+  }
 }
 
 export function putBucketContent({

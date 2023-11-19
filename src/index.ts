@@ -42,8 +42,25 @@ export const handler = async () => {
   });
 
   if (!oldCompaniesListText) {
-    throw new Error("Old companies list not found");
+    console.log("Old companies list not found. Creating new one");
+    
+    await putBucketContent({
+      s3Client,
+      bucketName,
+      key: "companies.csv",
+      content: newCompaniesList,
+    });
+
+    console.log("Since there was no old companies list, new one was created and no email was sent");
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: "Companies list updated",
+      }),
+    };
   }
+
   console.log("Old companies list loaded");
 
   const { addedCompanies, removedCompanies } = compareCompaniesList(
